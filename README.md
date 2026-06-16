@@ -1,7 +1,9 @@
 
-  # Modern Complaint Management UI
+  # SIPKL Kabupaten Tangerang
 
-  This is a code bundle for Modern Complaint Management UI. The original project is available at https://www.figma.com/design/KDOZhytnP5BiDN995qXivn/Modern-Complaint-Management-UI.
+  Sistem Informasi Pengaduan Kebersihan Lingkungan (SIPKL) Kabupaten Tangerang.
+
+  This repository is a refactored UI for managing public reports about environmental cleanliness in Kabupaten Tangerang. It is adapted from a sample complaint-management UI and tailored for academic project use.
 
   ## Running the code
 

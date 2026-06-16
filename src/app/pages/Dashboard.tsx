@@ -31,14 +31,21 @@ export default function Dashboard() {
       change: "+12.5%",
     },
     {
-      title: "Pending",
+      title: "Diterima",
       value: "89",
       icon: Clock,
-      color: "yellow",
+      color: "blue",
       change: "+4.3%",
     },
     {
-      title: "Selesai",
+      title: "Sedang Diproses",
+      value: "1,089",
+      icon: TrendingUp,
+      color: "yellow",
+      change: "+18.2%",
+    },
+    {
+      title: "Selesai Ditangani",
       value: "1,089",
       icon: CheckCircle2,
       color: "green",
@@ -58,16 +65,16 @@ export default function Dashboard() {
     { month: "Feb", pengaduan: 78 },
     { month: "Mar", pengaduan: 90 },
     { month: "Apr", pengaduan: 81 },
-    { month: "May", pengaduan: 95 },
+    { month: "Mei", pengaduan: 95 },
     { month: "Jun", pengaduan: 112 },
   ];
 
   const categoryData = [
-    { name: "Infrastruktur", value: 340 },
-    { name: "Pelayanan", value: 280 },
-    { name: "Kebersihan", value: 220 },
-    { name: "Keamanan", value: 180 },
-    { name: "Lainnya", value: 227 },
+    { name: "Sampah Liar", value: 340 },
+    { name: "Drainase Tersumbat", value: 280 },
+    { name: "Fasilitas Kebersihan Rusak", value: 220 },
+    { name: "Pencemaran Lingkungan", value: 180 },
+    { name: "Kategori Lain", value: 227 },
   ];
 
   const COLORS = ["#3b82f6", "#10b981", "#f59e0b", "#ef4444", "#8b5cf6"];
@@ -75,30 +82,30 @@ export default function Dashboard() {
   const recentReports = [
     {
       id: "PGD-001",
-      title: "Jalan Rusak di Jl. Sudirman",
-      category: "Infrastruktur",
-      status: "Pending",
+      title: "Sampah Liar di Jl. Mawar",
+      category: "Sampah Liar",
+      status: "Diterima",
       date: "15 Mei 2026",
     },
     {
       id: "PGD-002",
-      title: "Lampu Jalan Mati",
-      category: "Infrastruktur",
-      status: "Proses",
+      title: "Drainase Tersumbat di Jalan Merdeka",
+      category: "Drainase Tersumbat",
+      status: "Sedang Diproses",
       date: "15 Mei 2026",
     },
     {
       id: "PGD-003",
-      title: "Pelayanan Lambat",
-      category: "Pelayanan",
-      status: "Selesai",
+      title: "Tempat Sampah Rusak di Pasar",
+      category: "Fasilitas Kebersihan Rusak",
+      status: "Selesai Ditangani",
       date: "14 Mei 2026",
     },
     {
       id: "PGD-004",
-      title: "Sampah Menumpuk",
-      category: "Kebersihan",
-      status: "Pending",
+      title: "Sampah Menumpuk di Area Sekolah",
+      category: "Kategori Lain",
+      status: "Diterima",
       date: "14 Mei 2026",
     },
   ];
@@ -109,7 +116,7 @@ export default function Dashboard() {
       <div>
         <h1 className="text-3xl font-bold text-gray-800">Dashboard</h1>
         <p className="text-gray-600 mt-1">
-          Overview statistik pengaduan dan monitoring sistem
+          Overview statistik pengaduan kebersihan lingkungan
         </p>
       </div>
 
@@ -247,12 +254,12 @@ export default function Dashboard() {
                   <td className="px-6 py-4 whitespace-nowrap">
                     <span
                       className={`px-3 py-1 inline-flex text-xs font-medium rounded-full ${
-                        report.status === "Selesai"
-                          ? "bg-green-100 text-green-700"
-                          : report.status === "Pending"
-                          ? "bg-yellow-100 text-yellow-700"
-                          : "bg-blue-100 text-blue-700"
-                      }`}
+                          report.status === "Selesai Ditangani"
+                            ? "bg-green-100 text-green-700"
+                            : report.status === "Diterima"
+                            ? "bg-blue-100 text-blue-700"
+                            : "bg-yellow-100 text-yellow-700"
+                        }`}
                     >
                       {report.status}
                     </span>

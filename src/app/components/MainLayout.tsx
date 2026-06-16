@@ -11,6 +11,7 @@ import {
 } from "lucide-react";
 import { useState } from "react";
 import { useAuth } from "../context/AuthContext";
+import { APP_NAME, APP_SHORT_NAME } from "../constants/complaint";
 
 export default function MainLayout() {
   const [sidebarOpen, setSidebarOpen] = useState(true);
@@ -22,7 +23,7 @@ export default function MainLayout() {
     { path: "/", icon: LayoutDashboard, label: "Dashboard" },
     { path: "/pengaduan", icon: FileText, label: "Data Pengaduan" },
     { path: "/users", icon: Users, label: "Data User" },
-    { path: "/analytics", icon: BarChart3, label: "Analytics" },
+    { path: "/analytics", icon: BarChart3, label: "Statistik" },
   ];
 
   // Menu items untuk User
@@ -57,7 +58,7 @@ export default function MainLayout() {
         {/* Logo */}
         <div className="h-16 flex items-center justify-between px-6 border-b border-gray-200">
           {sidebarOpen && (
-            <h1 className="font-bold text-xl text-blue-600">SI Pengaduan</h1>
+            <h1 className="font-bold text-xl text-blue-600">{APP_SHORT_NAME}</h1>
           )}
           <button
             onClick={() => setSidebarOpen(!sidebarOpen)}
@@ -109,7 +110,7 @@ export default function MainLayout() {
         {/* Header */}
         <header className="h-16 bg-white border-b border-gray-200 flex items-center justify-between px-8">
           <h2 className="font-semibold text-gray-800">
-            Sistem Informasi Pengaduan
+            {APP_NAME}
           </h2>
           <div className="flex items-center gap-4">
             <div className="text-right">

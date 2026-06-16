@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router";
 import { Mail, Lock, Eye, EyeOff } from "lucide-react";
 import { useAuth } from "../context/AuthContext";
+import { APP_NAME, APP_SHORT_NAME } from "../constants/complaint";
 
 export default function Login() {
   const [showPassword, setShowPassword] = useState(false);
@@ -40,9 +41,9 @@ export default function Login() {
               <FileTextIcon className="w-8 h-8 text-white" />
             </div>
             <h1 className="text-2xl font-bold text-gray-800 mb-2">
-              SI Pengaduan
+              {APP_SHORT_NAME}
             </h1>
-            <p className="text-gray-600">Sistem Informasi Pengaduan</p>
+            <p className="text-gray-600">{APP_NAME}</p>
           </div>
 
           {/* Error Alert */}
@@ -144,7 +145,7 @@ export default function Login() {
 
           {/* Footer */}
           <p className="text-center text-sm text-gray-500 mt-6">
-            © 2026 SI Pengaduan. All rights reserved.
+            © 2026 {APP_SHORT_NAME}. All rights reserved.
           </p>
         </div>
       </div>

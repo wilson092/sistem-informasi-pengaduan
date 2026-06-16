@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Search, Filter, Plus, Eye } from "lucide-react";
 import { useNavigate } from "react-router";
+import { COMPLAINT_CATEGORIES, COMPLAINT_STATUSES, TANGERANG_DISTRICTS, STATUS_COLORS } from "../constants/complaint";
 import { useAuth } from "../context/AuthContext";
 import ComplaintFormModal from "../components/ComplaintFormModal";
 
@@ -9,6 +10,9 @@ export default function DataPengaduan() {
   const { user, getUserComplaints, getAllComplaints } = useAuth();
   const [searchTerm, setSearchTerm] = useState("");
   const [statusFilter, setStatusFilter] = useState("Semua");
+  const [categoryFilter, setCategoryFilter] = useState("Semua");
+  const [districtFilter, setDistrictFilter] = useState("Semua");
+  const [dateFilter, setDateFilter] = useState("");
   const [showModal, setShowModal] = useState(false);
 
   const isAdmin = user?.role === "admin";
@@ -17,35 +21,32 @@ export default function DataPengaduan() {
   const filteredData = allComplaints.filter((item) => {
     const matchesSearch =
       item.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      item.id.toLowerCase().includes(searchTerm.toLowerCase());
+      item.id.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      item.district.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesStatus = statusFilter === "Semua" || item.status === statusFilter;
-    return matchesSearch && matchesStatus;
+    const matchesCategory = categoryFilter === "Semua" || item.category === categoryFilter;
+    const matchesDistrict = districtFilter === "Semua" || item.district === districtFilter;
+    const matchesDate = !dateFilter || item.createdAt.slice(0, 10) === dateFilter;
+    return matchesSearch && matchesStatus && matchesCategory && matchesDistrict && matchesDate;
   });
 
   const getStatusLabel = (status: string) => {
     switch (status) {
-      case "pending":
-        return "Pending";
-      case "diproses":
-        return "Diproses";
-      case "selesai":
+      case "Diterima":
+        return "Diterima";
+      case "Sedang Diproses":
+        return "Sedang Diproses";
+      case "Selesai Ditangani":
         return "Selesai";
+      case "Ditolak":
+        return "Ditolak";
       default:
         return status;
     }
   };
 
   const getStatusColor = (status: string) => {
-    switch (status) {
-      case "selesai":
-        return "bg-green-100 text-green-700";
-      case "diproses":
-        return "bg-blue-100 text-blue-700";
-      case "pending":
-        return "bg-yellow-100 text-yellow-700";
-      default:
-        return "bg-gray-100 text-gray-700";
-    }
+    return STATUS_COLORS[status as keyof typeof STATUS_COLORS] || "bg-gray-100 text-gray-700";
   };
 
   const getUserName = (userId: string) => {
@@ -64,7 +65,7 @@ export default function DataPengaduan() {
           </h1>
           <p className="text-gray-600 mt-1">
             {isAdmin
-              ? "Kelola dan monitor semua pengaduan"
+              ? "Monitoring pengaduan kebersihan lingkungan"
               : "Lihat daftar pengaduan yang Anda buat"}
           </p>
         </div>
@@ -81,7 +82,7 @@ export default function DataPengaduan() {
 
       {/* Filters */}
       <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-200">
-        <div className="flex flex-col md:flex-row gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-5 gap-4">
           {/* Search */}
           <div className="flex-1 relative">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
@@ -103,11 +104,41 @@ export default function DataPengaduan() {
               className="px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none bg-white"
             >
               <option>Semua</option>
-              <option value="pending">Pending</option>
-              <option value="diproses">Diproses</option>
-              <option value="selesai">Selesai</option>
+              {COMPLAINT_STATUSES.map((status) => (
+                <option key={status} value={status}>{status}</option>
+              ))}
             </select>
           </div>
+          {isAdmin && (
+            <>
+              <select
+                value={categoryFilter}
+                onChange={(e) => setCategoryFilter(e.target.value)}
+                className="px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none bg-white"
+              >
+                <option>Semua</option>
+                {COMPLAINT_CATEGORIES.map((category) => (
+                  <option key={category} value={category}>{category}</option>
+                ))}
+              </select>
+              <select
+                value={districtFilter}
+                onChange={(e) => setDistrictFilter(e.target.value)}
+                className="px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none bg-white"
+              >
+                <option>Semua</option>
+                {TANGERANG_DISTRICTS.map((district) => (
+                  <option key={district} value={district}>{district}</option>
+                ))}
+              </select>
+              <input
+                type="date"
+                value={dateFilter}
+                onChange={(e) => setDateFilter(e.target.value)}
+                className="px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none"
+              />
+            </>
+          )}
         </div>
       </div>
 
@@ -136,6 +167,9 @@ export default function DataPengaduan() {
                     )}
                     <th className="px-6 py-3 text-left font-medium text-gray-600 uppercase tracking-wider">
                       Kategori
+                    </th>
+                    <th className="px-6 py-3 text-left font-medium text-gray-600 uppercase tracking-wider">
+                      Kecamatan
                     </th>
                     <th className="px-6 py-3 text-left font-medium text-gray-600 uppercase tracking-wider">
                       Status
@@ -170,6 +204,9 @@ export default function DataPengaduan() {
                       <td className="px-6 py-4 whitespace-nowrap text-gray-600">
                         {item.category}
                       </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-gray-600">
+                        {item.district}
+                      </td>
                       <td className="px-6 py-4 whitespace-nowrap">
                         <span className={`px-3 py-1 inline-flex text-xs font-medium rounded-full ${getStatusColor(item.status)}`}>
                           {getStatusLabel(item.status)}
@@ -186,12 +223,12 @@ export default function DataPengaduan() {
                         <td className="px-6 py-4 whitespace-nowrap">
                           <span
                             className={`px-3 py-1 inline-flex text-xs font-medium rounded-full ${
-                              item.responseStatus === "sudah"
+                              item.adminResponse.length > 0
                                 ? "bg-green-100 text-green-700"
                                 : "bg-yellow-100 text-yellow-700"
                             }`}
                           >
-                            {item.responseStatus === "sudah" ? "✓ Sudah" : "Belum"}
+                            {item.adminResponse.length > 0 ? "Sudah" : "Belum"}
                           </span>
                         </td>
                       )}
